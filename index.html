@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schnitzeljagd GPS-Prüfung</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.success {
+    color: green;
+    font-weight: bold;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
+#nextApp {
+    margin-top: 20px;
+    display: none;
+}
+</style>
+</head>
+<body>
+
+<h1>🚋 Straßenbahn-Schnitzeljagd</h1>
+
+<h2 id="zielName"></h2>
+
+<button onclick="pruefeStandort()">
+Standort prüfen
+</button>
+
+<p id="status"></p>
+
+<div id="nextApp">
+    <h3>✅ Ziel erreicht!</h3>
+    <a id="appLink" href="#" target="_blank">
+        Nächsteript>
+
+// Alle Stationen hier hinterlegen
+
+const stationen = {
+
+Wahren: {
+
+name: "Endstelle Wahren, Pater Aurelius Platz",
+
+lat: 51.37465573195923,
+
+lon: 12.3230222585739,
+
+radius: 100,
+
+nextApp: "https://learningapps.org/watch?v=piahzonoa25"
+
+},
+
+Paunsdorf: {
+
+name: "Paunsdorf Straßenbahnhof, Betriebshof Paunsdorf VH3",
+
+lat: 51.345886,
+
+lon: 12.457267,
+
+radius: 100,
+
+nextApp: "https://learningapps.org/watch?v=pnpnihi5v25"
+
+},
+
+Torgauer Platz: {
+
+name: "Torgauer Platz, Modellbahn Bertram",
+
+lat: 51.345222,
+
+lon: 12.413655,
+
+radius: 100,
+
+nextApp: "https://learningapps.org/watch?v=p2ktpc2wk25"
+
+},
+
+
+Angerbrücke: {
+
+name: "Angerbrücke Kammergebäude, Betriebshof Angerbrücke VH4",
+
+lat: 51.339284,
+
+lon: 12.340058,
+
+radius: 100,
+
+nextApp: "https://learningapps.org/watch?v=p54rg19dc25"
+
+},
+
+};
+
+// Aufruf z.B.
+// gps.html?ziel=gohlis
+
+const params = new URLSearchParams(window.location.search);
+const ziel = params.get("ziel");
+
+if (!stationen[ziel]) {
+    document.body.innerHTML =
+        "<h2>Unbekannte Station</h2>";
+}
+
+const station = stationen[ziel];
+
+document.getElementById("zielName").innerText =
+    station.name;
+
+
+// Entfernung berechnen
+
+function getDistance(lat1, lon1, lat2, lon2) {
+
+    const R = 6371000;
+
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+
+    const a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180) *
+        Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon/2) * Math.sin(dLon/2);
+
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+    return R * c;
+}
+
+
+function pruefeStandort() {
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position) {
+
+            const entfernung = getDistance(
+                position.coords.latitude,
+                position.coords.longitude,
+                station.lat,
+                station.lon
+            );
+
+            if (entfernung <= station.radius) {
+
+                document.getElementById("status").innerHTML =
+                    '<span class="success">✅ Ziel erreicht</span>';
+
+                document.getElementById("nextApp").style.display =
+                    "block";
+
+                document.getElementById("appLink").href =
+                    station.nextApp;
+
+            } else {
+
+                document.getElementById("status").innerHTML =
+                    '<span class="error">❌ Noch nicht am Ziel. Entfernung: '
+                    + Math.round(entfernung)
+                    + ' Meter</span>';
+
+            }
+
+        },
+
+        function() {
+            alert("Standort konnte nicht ermittelt werden.");
+        }
+
+    );
+
+}
+
+</script>
+
+</body>
+</html>
