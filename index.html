@@ -5,60 +5,148 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Schnitzeljagd GPS-Prüfung</title>
 <style>
-body {
-    font-family: Arial, sans-serif;
-    max-width: 600px;
-    margin: 40px auto;
-    padding: 20px;
-    text-align: center;
+*{
+    box-sizing:border-box;
+    font-family:Segoe UI,Arial,sans-serif;
 }
-button {
-    padding: 12px 24px;
-    font-size: 18px;
-    cursor: pointer;
+
+body{
+    background:#f4f6f8;
+    display:flex;
+    justify-content:center;
+    padding:20px;
 }
-select {
-    padding: 10px 16px;
-    font-size: 18px;
-    margin-top: 10px;
+
+.container{
+    background:#fff;
+    width:100%;
+    max-width:600px;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
 }
-.success {
-    color: green;
-    font-weight: bold;
+
+h1{
+    text-align:center;
+    color:#003366;
 }
-.error {
-    color: red;
-    font-weight: bold;
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    background:#003366;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
 }
-.info {
-    color: #555;
+
+button:hover{
+    opacity:.95;
 }
-.hidden {
-    display: none;
+
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    margin-top:10px;
 }
-#nextApp {
-    margin-top: 20px;
-    display: none;
+
+.info{
+    color:#555;
 }
-#nextApp a {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background: #2e7d32;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
+
+.hidden{
+    display:none;
 }
-#zurueckBtn {
-    margin-top: 30px;
-    background: #eee;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+
+#spruch{
+    text-align:center;
+    color:#003366;
+    font-weight:600;
+    margin:10px 0 20px 0;
 }
+
+#infoBox{
+    margin-top:15px;
+    background:#eef5ff;
+    border-left:5px solid #003366;
+    padding:15px;
+    border-radius:8px;
+    text-align:left;
+}
+
+.successBox{
+    background:#e8f5e9;
+    border-left:5px solid #2e7d32;
+    padding:15px;
+    border-radius:8px;
+    margin-top:15px;
+}
+
+.errorBox{
+    background:#ffebee;
+    border-left:5px solid #c62828;
+    padding:15px;
+    border-radius:8px;
+    margin-top:15px;
+}
+
+#nextApp{
+    margin-top:20px;
+    display:none;
+}
+
+#nextApp a{
+    display:inline-block;
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background:#2e7d32;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:600;
+}
+
+#nextApp a:hover{
+    opacity:.95;
+}
+
+#zurueckBtn,
+#zurueckBtn2{
+    background:#6c757d;
+}
+
+footer{
+    text-align:center;
+    margin-top:20px;
+    color:#777;
+    font-size:12px;
+}
+
+.loader{
+    width:24px;
+    height:24px;
+    border:4px solid #ddd;
+    border-top:4px solid #003366;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin:10px auto;
+}
+
+@keyframes spin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
 </style>
 </head>
 <body>
+
+<div class="container">
 
 <h1>🚋 Straßenbahn-Schnitzeljagd</h1>
 
@@ -76,7 +164,7 @@ select {
         (learningapps.org) wieder geschlossen werden.<br><br>
         Bitte zur Arbeitszeiterfassung <strong>"Karte ziehen"</strong>.<br>
         Beginn und Ende der Tour ist die <strong>Angerbrücke, Kammergebäude</strong>.<br><br>
-        Viel Spaß wünscht die Fahrschule! 🚋
+        Viel Spaß wünscht eure Fahrschule! 🚋
     </p>
 </div>
 
@@ -221,7 +309,13 @@ function pruefeStandort() {
     const stationen = touren[gewaehlteTour];
     if (!stationen) return;
 
-    document.getElementById("status").innerHTML = "⏳ Standort wird ermittelt …";
+    document.getElementById("status").innerHTML =
+`
+<div class="infoBox">
+    📍 Standort wird ermittelt...
+    <div class="loader"></div>
+</div>
+`;
     document.getElementById("nextApp").style.display = "none";
 
     navigator.geolocation.getCurrentPosition(
@@ -260,5 +354,12 @@ function pruefeStandort() {
     );
 }
 </script>
+
+<footer>
+© LAB Leipziger Aus- und Weiterbildungsbetriebe GmbH<br>
+Fahrschule Straßenbahn
+</footer>
+
+</div>
 </body>
 </html>
