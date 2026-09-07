@@ -72,6 +72,8 @@ select {
         <strong>"Standort prüfen"</strong>. Bist du am richtigen Ort, erscheint in der
         Anwendung der Link zur nächsten Aufgabe. So gelangst du Schritt für Schritt
         von Standort zu Standort.<br><br>
+        Nach erfolgreicher Erledigung der Aufgabe kann das Popup-Fenster
+        (learningapps.org) wieder geschlossen werden.<br><br>
         Bitte zur Arbeitszeiterfassung <strong>"Karte ziehen"</strong>.<br>
         Beginn und Ende der Tour ist die <strong>Angerbrücke, Kammergebäude</strong>.<br><br>
         Viel Spaß wünscht die Fahrschule! 🚋
@@ -80,6 +82,7 @@ select {
 
 <!-- ===== Tour-Auswahl ===== -->
 <div id="tourAuswahl">
+    <p class="info"><strong>Bitte sorgfältig die Infos lesen!</strong></p>
     <p class="info">Bitte wähle deine Tour aus:</p>
     <select id="tourSelect" onchange="tourWaehlen()">
         <option value="">-- Tour wählen --</option>
@@ -100,6 +103,7 @@ select {
 
 <!-- ===== GPS-Check-in Bereich (Tour 3) ===== -->
 <div id="checkinBereich" class="hidden">
+    <h2 id="tourUeberschrift"></h2>
     <p class="info">Start &amp; Ziel: Angerbrücke. Prüfe an jeder Station deinen Standort.</p>
 
     <p>
@@ -178,6 +182,7 @@ function tourWaehlen() {
     const stationen = touren[gewaehlt];
     if (stationen) {
         document.getElementById("checkinBereich").classList.remove("hidden");
+        document.getElementById("tourUeberschrift").innerText = "Tour " + gewaehlt;
         // Tour-Einführungslink automatisch öffnen (Tour 3)
         if (gewaehlt === "3") {
             window.open("https://learningapps.org/watch?v=ptt7mbcwt25", "_blank");
@@ -193,6 +198,7 @@ function zurueckZurAuswahl() {
     document.getElementById("status").innerHTML = "";
     document.getElementById("nextApp").style.display = "none";
     document.getElementById("tourSelect").value = "";
+    document.getElementById("tourUeberschrift").innerText = "";
     document.getElementById("tourAuswahl").classList.remove("hidden");
 }
 
