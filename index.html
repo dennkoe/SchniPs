@@ -142,6 +142,14 @@ footer{
     to{transform:rotate(360deg);}
 }
 
+.fallback-image{
+    width:100%;
+    max-width:400px;
+    margin-top:20px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
 </style>
 </head>
 <body>
@@ -162,8 +170,8 @@ footer{
         von Standort zu Standort.<br><br>
         Nach erfolgreicher Erledigung der Aufgabe kann das Popup-Fenster
         (learningapps.org) wieder geschlossen werden.<br><br>
-        Beginn und Ende der Tour ist die <strong>Angerbrücke, Kammergebäude</strong>.
-        Beachte bitte, dass hier ganz am Ende auch noch eine Aufgabe zu lösen ist.<br><br>
+        Bitte zur Arbeitszeiterfassung <strong>"Karte ziehen"</strong>.<br>
+        Beginn und Ende der Tour ist die <strong>Angerbrücke, Kammergebäude</strong>.<br><br>
         Viel Spaß wünscht eure Fahrschule! 🚋
     </p>
 </div>
@@ -211,6 +219,16 @@ footer{
         <a id="appLink" href="#" target="_blank">Weiter zum Minispiel</a>
     </div>
 
+<div id="fallbackBild" class="hidden">
+
+    <img
+        src="fallback.jpg"
+        alt="Fallback"
+        class="
+             style="max-width:100%; border-radius:8px;">
+    </div>
+
+</div>
     <button id="zurueckBtn2" onclick="zurueckZurAuswahl()">Zurück zur Tour-Auswahl</button>
 </div>
 
@@ -285,6 +303,14 @@ function zurueckZurAuswahl() {
     document.getElementById("tourPlatzhalter").classList.add("hidden");
     document.getElementById("status").innerHTML = "";
     document.getElementById("nextApp").style.display = "none";
+    document.getElementById("fallbackBild")
+   	 .classList.add("hidden");
+		setTimeout(() => {
+
+    document.getElementById("fallbackBild")
+        .classList.remove("hidden");
+
+}, 120000);
     document.getElementById("tourSelect").value = "";
     document.getElementById("tourUeberschrift").innerText = "";
     document.getElementById("tourAuswahl").classList.remove("hidden");
@@ -336,6 +362,8 @@ function pruefeStandort() {
             });
 
             if (treffer) {
+		document.getElementById("fallbackBild")
+   		 .classList.add("hidden");
                 document.getElementById("status").innerHTML =
                     '<span class="success">✅ Du bist an: ' + treffer.name + '</span>';
                 document.getElementById("erreichtName").innerText =
